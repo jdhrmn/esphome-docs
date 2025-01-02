@@ -9,7 +9,7 @@ params:
 {{< anchor "modbus" >}}
 
 The Modbus protocol is used by many consumer and industrial devices for communication.
-This component allows components in ESPHome to communicate to those devices via RTU protocol. You can access the coils, inputs, holding, read registers from your devices as sensors, switches, selects, numbers or various other ESPHome components and present them to your favorite Home Automation system. You can even write them as binary or float ouptputs from ESPHome.
+This component allows components in ESPHome to communicate to those devices via RTU or ASCII protocol. You can access the coils, inputs, holding, read registers from your devices as sensors, switches, selects, numbers or various other ESPHome components and present them to your favorite Home Automation system. You can even write them as binary or float ouptputs from ESPHome.
 
 The various sub-components implement some of the Modbus functions below (depending on their required functionality):
 
@@ -49,9 +49,21 @@ modbus:
   Set this value to the maximum time required for the slowest device on the bus to begin responding (time to first byte).
   If a device starts responding within this time, the next command will be queued and sent after the response is finished, no matter how long the response.
 
-- **disable_crc** (*Optional*, boolean): Ignores a bad CRC if set to `true`. Defaults to `false`
+- **disable_crc** (*Optional*, boolean): Ignores a bad CRC (LRC in ASCII mode) if set to `true`. Defaults to `false`
 
 - **role** (*Optional*, string): The role of this component, `client` or `server`. Defaults to `client`.
+
+- **transmission_mode**  (*Optional*, string): The transmission mode of this component, `rtu` or `ascii`. Defaults to `rtu`.
+  The transmission mode must be the same for all devices on a ModBUS Serial Line.
+
+- **rx_character_timeout** (*Optional*, [Time](#config-time)): Maximum time in milliseconds that may elapse between two received characters/bytes.
+  If this time is exceeded, the frame is considered to be faulty. Defaults to `50 ms`.
+
+- **ascii_rx_start_of_frame** (*Optional*, string): Manually specify the start character for incoming frames in ASCII mode.
+  This is necessary in rare cases when communicating with devices that do not exactly follow the ModBUS specifications. Defaults to colon (`:`).
+
+- **ascii_tx_start_of_frame** (*Optional*, string): Manually specify the start character for outgoing frames in ASCII mode.
+  Defaults to colon (`:`).
 
 ## See Also
 
